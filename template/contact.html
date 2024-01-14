@@ -1,0 +1,171 @@
+
+{%extends 'navbar_footer.html'%}
+{%load static %}
+
+{%block 'main_content'%}
+
+
+
+    <!-- ##### Right Side Cart Area ##### -->
+    <div class="cart-bg-overlay"></div>
+
+    <div class="right-side-cart-area">
+
+        <!-- Cart Button -->
+        <div class="cart-button">
+            <a href="#" id="rightSideCart"><img src="img/core-img/bag.svg" alt=""> <span>3</span></a>
+        </div>
+
+        <div class="cart-content d-flex">
+
+            <!-- Cart List Area -->
+            <div class="cart-list">
+                <!-- Single Cart Item -->
+                <div class="single-cart-item">
+                    <a href="#" class="product-image">
+                        <img src="img/product-img/product-1.jpg" class="cart-thumb" alt="">
+                        <!-- Cart Item Desc -->
+                        <div class="cart-item-desc">
+                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                            <span class="badge">Mango</span>
+                            <h6>Button Through Strap Mini Dress</h6>
+                            <p class="size">Size: S</p>
+                            <p class="color">Color: Red</p>
+                            <p class="price">$45.00</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Single Cart Item -->
+                <div class="single-cart-item">
+                    <a href="#" class="product-image">
+                        <img src="img/product-img/product-2.jpg" class="cart-thumb" alt="">
+                        <!-- Cart Item Desc -->
+                        <div class="cart-item-desc">
+                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                            <span class="badge">Mango</span>
+                            <h6>Button Through Strap Mini Dress</h6>
+                            <p class="size">Size: S</p>
+                            <p class="color">Color: Red</p>
+                            <p class="price">$45.00</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Single Cart Item -->
+                <div class="single-cart-item">
+                    <a href="#" class="product-image">
+                        <img src="img/product-img/product-3.jpg" class="cart-thumb" alt="">
+                        <!-- Cart Item Desc -->
+                        <div class="cart-item-desc">
+                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                            <span class="badge">Mango</span>
+                            <h6>Button Through Strap Mini Dress</h6>
+                            <p class="size">Size: S</p>
+                            <p class="color">Color: Red</p>
+                            <p class="price">$45.00</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-amount-summary">
+
+                <h2>Summary</h2>
+                <ul class="summary-table">
+                    <li><span>subtotal:</span> <span>$274.00</span></li>
+                    <li><span>delivery:</span> <span>Free</span></li>
+                    <li><span>discount:</span> <span>-15%</span></li>
+                    <li><span>total:</span> <span>$232.00</span></li>
+                </ul>
+                <div class="checkout-btn mt-100">
+                    <a href="checkout.html" class="btn emarket-btn">check out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Right Side Cart End ##### -->
+
+
+    <div class="contact-area d-flex align-items-center">
+
+        <div class="google-map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.056119526889!2d76.69247175098239!3d30.7168226933597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fee5a42944be3%3A0xb713d3a3e26a89c1!2sSachTech%20Solution%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1591606097307!5m2!1sen!2sin" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        </div>
+
+        <div class="contact-info">
+            <h2>How to Find Us</h2>
+            <p>Mauris viverra cursus ante laoreet eleifend. Donec vel fringilla ante. Aenean finibus velit id urna vehicula, nec maximus est sollicitudin.</p>
+
+            <div class="contact-address mt-50">
+                <p><span>address:</span> 10 Suffolk st Soho, London, UK</p>
+                <p><span>telephone:</span> +12 34 567 890</p>
+                <p><a href="mailto:contact@emarket.com">contact@emarket.com</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkout_area section-padding-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-8 mx-auto">
+                    <div class="checkout_details_area mt-50 clearfix">
+                        <div class="cart-page-heading mb-30">
+                        <h5>Contact Form</h5>
+                        </div>
+                        <form action="#" method="post">
+                            {%csrf_token%}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name">First Name <span>*</span></label>
+                                    <input type="text" class="form-control" id="first_name"  name='first_name' required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name">Last Name <span>*</span></label>
+                                    <input type="text" class="form-control" id="last_name" required name='last_name' required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="last_name">Email <span>*</span></label>
+                                    <input type="email" class="form-control" id="last_name" required name='email' required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="last_name">Contact <span>*</span></label>
+                                    <input type="number" class="form-control" id="last_name" required name='contact' required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                <label for="country">Brand Type <span>*</span></label>
+                                <select class="w-100" id="country" name='brand_type' style="display: none;">
+                                    
+                                {%for i in brand_type_data %}
+                                    <option value="{{i.name}}">{{i.name}}</option>
+                                {%endfor%}
+                                </select>
+                                <div class="nice-select w-100" tabindex="0">
+                                    <span class="current" disabled>Please Select</span>
+                                    <ul class="list">
+                                        {%for i in brand_type_data %}
+                                        <li data-value="{{i.name}}" class="option selected">{{i.name}}</li>
+                                        {%endfor%}
+                                    </ul>
+                                </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="company">Subjects</label>
+                                    <input type="text" class="form-control" id="company" name='subject' >
+                                </div>
+                                    <div class="col-12 mb-3">
+                                    <label for="street_address">Message <span>*</span></label>
+                                    <textarea name="message" id="" cols="50" style="height: 100px;" class="form-control mb-3" id="street_address" required></textarea>
+                                </div>
+                            </div>
+                            <button class="btn emarket-btn" name='contact_submit' >Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+{%endblock%}

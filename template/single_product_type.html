@@ -1,0 +1,133 @@
+{%extends 'navbar_footer.html'%}
+{%load static %}
+{% load mathfilters %}
+
+{%block 'main_content'%}
+
+    <!-- ##### Breadcumb Area Start ##### -->
+    {%for dd in get_product_type%}
+    <div class="breadcumb_area bg-img" style="background-image: url(static/img/bg-img/breadcumb.jpg);">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="page-title text-center">
+                        
+                        
+                        <h2>{{dd.name}}</h2>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+    <!-- ##### Breadcumb Area End ##### -->
+
+    <!-- ##### Shop Grid Area Start ##### -->
+    <section class="shop_grid_area section-padding-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-8 col-lg-10 mx-auto">
+                    <div class="shop_grid_product_area">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="product-topbar d-flex align-items-center justify-content-between">
+                                    <!-- Total Products -->
+                                    <div class="total-products">
+                                        <p><span>{{get_product_type_data|length}}</span> products found</p>
+                                    </div>
+                                    <!-- Sorting -->
+                                    <!-- <div class="product-sorting d-flex">
+                                        <p>Sort by:</p>
+                                        <form action="#" method="get">
+                                            <select name="select" id="sortByselect">
+                                                <option value="value">Highest Rated</option>
+                                                <option value="value">Newest</option>
+                                                <option value="value">Price: $$ - $</option>
+                                                <option value="value">Price: $ - $$</option>
+                                            </select>
+                                            <input type="submit" class="d-none" value="">
+                                        </form>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            {%for data in get_product_type_data %}
+                            <!-- Single Product -->
+                            <div class="col-12 col-sm-6 col-lg-4 mx-auto">
+                                <div class="single-product-wrapper">
+                                    <!-- Product Image -->
+                                    <div class="product-img">
+                                        <img src="media/{{data.product_img}}" style="height: 450px;" alt="">
+                                        <!-- Hover Thumb -->
+                                        <img class="hover-img" src="media/{{data.product_img}}" style="height: 450px;" alt="">
+
+                                        <!-- Product Badge -->
+                                        {%if data.discount == 0%}
+                                        <span></span>
+                                        {%else%}
+                                                    <div class="product-badge offer-badge">
+                                            <span>-{{data.discount}} <i class="fa fa-rupee"></i> </span>
+                                        </div>
+                                            {%endif%}
+                                        <!-- Favourite -->
+                                        <div class="product-favourite">
+                                            {%if user.is_authenticated%}
+                                            <a href="#" class="favme fa fa-heart"></a>
+                                            {%else%}
+                                            <a href="{%url 'login_page'%}" class="favme fa fa-sign-in"></a>
+                                            {%endif%}
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Description -->
+                                    <div class="product-description">
+                                        <span>{{data.brand_name}}</span>
+                                        <a href="{%url 'single_product_detail'%}?pro_id={{data.id}}&pro_type={{data.product_type_id}}&pro_cat={{data.product_category_id}}">
+                                            <h6>{{data.product_name}}</h6>
+                                        </a>
+                                        {%if data.discount == 0%}
+                                        <p class="product-price"></span><i class="fa fa-rupee"></i> {{data.price|sub:data.discount}}</p>
+                                        {%else%}
+                                        <p class="product-price"><span class="old-price"><i class="fa fa-rupee"></i> {{data.price}}</span><i class="fa fa-rupee"></i> {{data.price|sub:data.discount}}</p>
+                                        {%endif%}
+
+                                        <!-- Hover Content -->
+                                        <div class="hover-content">
+                                            <!-- Add to Cart -->
+                                            <div class="add-to-cart-btn">
+                                                {%if user.is_authenticated%}
+                                                <a href="#" id='pro_id{{data.id}}' class="btn emarket-btn" onclick="add_to_cart_btn('{{data.id}}','{{data.product_name}}','{{data.product_type}}','{{data.product_category}}','{{data.price}}','{{data.brand_name}}','{{data.product_img}}','{{data.discount}}',this.id)">Add to Cart</a>
+                                                {%else%}
+                                                <a href="{%url 'login_page' %}" class="btn emarket-btn">Please Login</a>
+                                                {%endif%}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {%endfor%}
+
+
+                        </div>
+                    </div>
+                    <!-- Pagination -->
+                    <!-- <nav aria-label="navigation">
+                        <ul class="pagination mt-50 mb-70">
+                            <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">21</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
+                        </ul>
+                    </nav> -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Shop Grid Area End ##### -->
+
+{%endblock%}

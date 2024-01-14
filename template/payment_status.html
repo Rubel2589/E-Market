@@ -1,0 +1,25 @@
+{%extends 'navbar_footer.html'%}
+{%load static %}
+{% load mathfilters %}
+
+{%block 'main_content'%} 
+
+
+
+
+    <div class="row alert alert-warning">
+        <div class="col-md-10">
+            {{response}}
+        </div>
+        <div class="col-md-6 mx-auto">
+            <h3>Payment Status regarding Order id = {{response.ORDERID}}</h3>
+            {%if response.RESPCODE == '01'%}
+            ORDER SUCCESS
+            {%else%}
+            ORDER Failed
+            {%endif%}
+        </div>
+    </div>
+
+
+{%endblock%}

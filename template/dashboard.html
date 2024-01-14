@@ -1,0 +1,443 @@
+{%extends 'navbar_footer.html'%}
+{%load static %}
+{% load mathfilters %}
+
+{%block 'main_content'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- SITE TITTLE -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classimax</title>
+  
+  <!-- FAVICON -->
+  <link href="img/favicon.png" rel="shortcut icon">
+  <!-- PLUGINS CSS STYLE -->
+  <!-- <link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"> -->
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="{%static 'user_dashboard/plugins/bootstrap/css/bootstrap.min.css'%}">
+  <link rel="stylesheet" href="{%static 'user_dashboard/plugins/bootstrap/css/bootstrap-slider.css'%}">
+  <!-- Font Awesome -->
+  <link href="{%static 'user_dashboard/plugins/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+  <!-- Owl Carousel -->
+  <link href="{%static 'user_dashboard/plugins/slick-carousel/slick/slick.css'%}" rel="stylesheet">
+  <link href="{%static 'user_dashboard/plugins/slick-carousel/slick/slick-theme.css'%}" rel="stylesheet">
+  <!-- Fancy Box -->
+  <link href="{%static 'user_dashboard/plugins/fancybox/jquery.fancybox.pack.css'%}" rel="stylesheet">
+  <link href="{%static 'user_dashboard/plugins/jquery-nice-select/css/nice-select.css'%}" rel="stylesheet">
+  <!-- CUSTOM CSS -->
+  <link href="{%static 'user_dashboard/css/style.css'%}" rel="stylesheet">
+
+  <style>
+      .profile-thumb:hover  
+      {
+          transition:  2s;
+        padding-bottom: 40px;
+      }
+      .profile-thumb:hover  #change_profile_image
+      {
+        transition: 2s;
+        opacity: 1;
+        bottom: 35%;
+      }
+      #change_profile_image
+      { 
+        opacity:0;
+        /* transition: 2s; */
+        bottom: 50%;
+        left:32% ;
+        position: absolute;
+      }
+  </style>
+
+</head>
+
+<body class="body-wrapper">
+
+<!-- delete product modal start-->
+        <div class="modal fade" id="delete_product"  role="dialog" style="z-index: 99999999 !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body text-left">
+                      <h3 class="alert alert-danger">Are You Sure to Delete this product</h3>
+                       <form action='{%url "delete_product_url" %}' method="post">
+                         {%csrf_token%}
+                           <input type="hidden"  placeholder="Your First Name" name='delete_product_input' id='delete_product_id' class="form-control">
+                           <div class="text-center">
+                             <input type="submit" class="btn btn-danger btn-sm">
+                           </div>
+                       </form>
+                    
+                    </div>
+                    <div class="modal-footer border-top-0 mb-3 mx-5 text-right">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- delete product modal end-->
+
+<!-- edit profile  modal start-->
+        <div class="modal fade" id="edit_profile"  role="dialog" style="z-index: 99999999 !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body text-left">
+                    {%for user_data in get_user_login_data %}
+                       <form>
+                           <label for="">First Name</label>
+                           <input type="text" placeholder="Your First Name" value='{{user_data.first_name}}' class="form-control">
+                           <label for="">Last Name</label>
+                           <input type="text" placeholder="Your First Name" value='{{user_data.first_name}}' class="form-control">
+                       </form>
+                    {%endfor%}
+                    </div>
+                    <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-lg-between justify-content-center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- edit profile modal end-->
+
+<!-- change password  modal start-->
+        <div class="modal fade" id="change_password"  role="dialog" style="z-index: 99999999 !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body text-left">
+                        <div class="old_password_check">
+                            <h2 class="text-center">Old Password </h2>
+                            <label for="">Old Password</label>
+                            <input type="text" id='old_password' placeholder="Enter your Old Password" class="form-control">
+                            <div class="text-center mt-4">
+                                <button class="btn btn-info" id='check_password_btn'>Check Password</button>
+                            </div>
+                        </div>
+                        <div class="new_password">
+                            <h3>Set New Password</h3>
+                            <div class="alert" id='new_password_error'></div>
+                            <form action="" method="post">
+                                {%csrf_token%}
+                                <label for="">New Password</label>
+                                <input type="text" id='new_password' name="new_password" placeholder="Enter your New Password" class="form-control">
+                                <label for="">Confirm Password</label>
+                                <input type="text" id='conf_password' name="conf_password" placeholder="Confirm Password" class="form-control">
+                                <div class="text-center mt-4">
+                                    <button class="btn btn-info" name='set_new_password' type="submit" id='new_password_btn'>ChangePassword</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 mb-3 mx-5 text-right  ">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- change password modal end-->
+
+<!-- change image  modal start-->
+        <div class="modal fade" id="change_profile_image_modal"  role="dialog" style="z-index: 99999999 !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body text-left">
+                      <h3>Change Image</h3>
+                        <form action="{%url 'profile_image_change'%}" method="post" enctype="multipart/form-data" >
+                          {%csrf_token%}
+                            <div class="custom-file">
+                                <input type="file" name='new_profile_image' class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                              </div>
+                              <div class="text-center mt-4" >
+                                <input type="submit" value="Change image" class="btn btn-success btn-sm">
+                              </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer border-top-0 mb-3 mx-5 text-right  ">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- change image modal end-->
+
+<!-- View Product  modal start-->
+{%for cart_data in get_login_user_cart_data%}
+        <div class="modal fade" id="pro{{cart_data.id}}"  role="dialog" style="z-index: 99999999 !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body"> 
+                      <div class="row">
+                        <div class="col-md-12 text-center">
+                          <h3>Product Data</h3>
+                        </div>
+                            <div class="col-md-4">     
+                             <img width="80px" height="auto" src="/media/{{cart_data.pro_image}}" alt="image description">                        
+                            </div>
+                            <div class="col-md-6">
+                              <strong>{{cart_data.pro_name}}</strong></br>
+                              <strong>{{cart_data.brand_name}}</strong></br>
+                              <strong>{{cart_data.price}}</strong></br>
+                              <strong>{{cart_data.discount}}</strong></br>
+                            </div>
+                        </div>
+                      </div>
+                        
+
+                    <div class="modal-footer border-top-0 mb-3 mx-5 text-right  ">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      {%endfor%}
+<!-- View Product modal end-->
+
+
+<!--==================================
+=            User Profile            =
+===================================-->
+<section class="dashboard section" style="margin-top: 100px;">
+  <!-- Container Start -->
+  <div class="container" style="max-width:1300px !important">
+    <!-- Row Start -->
+    <div class="row">
+      <div class="col-md-10 offset-md-1 col-lg-4 offset-lg-0">
+        <div class="sidebar">
+          <!-- User Widget -->
+          {%for user_data in get_user_login_data %}
+          <div class="widget user-dashboard-profile">
+            <!-- User Image -->
+            <div class="profile-thumb ">
+              <img src="/media/{{user_data.profile_image}}" alt="" class="rounded-circle">
+              <button id='change_profile_image' data-toggle="modal" data-target="#change_profile_image_modal" >Change Profile Image</button>
+            </div>
+            <!-- User Name -->
+            <h5 class="text-center">{{user_data.first_name}} {{user_data.last_name}}</h5>
+            <!-- <p>Joined February 06, 2017</p> -->
+            <a href="#" data-toggle="modal" data-target="#edit_profile" class="btn btn-main-sm">Edit Profile</a>
+          </div>
+          {%endfor%}
+          <!-- Dashboard Links -->
+          <div class="widget user-dashboard-menu">
+            <ul>
+              <!-- <li class="active"><a href="dashboard-my-ads.html"><i class="fa fa-user"></i> My Cart</a></li> -->
+              <li><a href="#"><i class="fa fa-bookmark-o"></i> Total Product in Cart <span class="dashboard_cart_count" ></span></a></li>
+              <li><a href="#" data-toggle="modal" data-target="#change_password"><i class="fa fa-file-archive-o"></i>Change Password </a></li>
+              <!-- <li><a href="dashboard-pending-ads.html"><i class="fa fa-bolt"></i> Transaction History<span>23</span></a></li> -->
+              <li><a href="{%url 'logout'%}"><i class="fa fa-cog"></i> Logout</a></li>
+              <!-- <li><a href="" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete
+                  Account</a></li> -->
+            </ul>
+          </div>
+
+          <!-- delete-account modal -->
+          						  <!-- delete account popup modal start-->
+                <!-- Modal -->
+                <div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                  aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body text-center">
+                        <img src="images/account/Account1.png" class="img-fluid mb-2" alt="">
+                        <h6 class="py-2">Are you sure you want to delete your account?</h6>
+                        <p>Do you really want to delete these records? This process cannot be undone.</p>
+                        <textarea name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
+                      </div>
+                      <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-lg-between justify-content-center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- delete account popup modal end-->
+          <!-- delete-account modal -->
+
+        </div>
+      </div>
+      <!-- Cart Data -->
+      <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-0">
+        <div class="widget dashboard-container my-adslist">
+          <h3 class="widget-header">Your Cart</h3>
+          {%if get_login_user_cart_data|length == 0%}
+          <div class="alert alert-danger">There is no Product in your Cart</div>
+          {%else%}
+          <table class="table  product-dashboard-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th class="text-center">Product Details</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                {%for cart_data in get_login_user_cart_data%}
+              <tr>
+                <td class="product-thumb">
+                  <img width="80px" height="auto" src="/media/{{cart_data.pro_image}}" alt="image description"></td>
+                <td class="product-details " style="padding-left: 120px;">
+                  <h3 class="title">{{cart_data.pro_name}}</h3>
+                  <span class="add-id text-capitalize"><strong>Brand:</strong> {{cart_data.brand_name}} </span>
+                  <span><strong>Price: </strong><time>{{cart_data.price}}</time> </span>
+                  <span class="status "><strong>Discount</strong>{{cart_data.discount}}</span>
+                  {%if cart_data.discount == 0%}
+                  <span class="location active"><strong>Total Price</strong>{{cart_data.price}}</span>
+                  {%else%}
+                  <span class="location active"><strong>Total Price</strong>{{cart_data.price|sub:cart_data.discount}}</span>
+                  {%endif%}
+                </td>
+                {%if cart_data.status == '0' %}
+                <td class="product-category"><span class="categories">In Cart</span></td>
+                {%else%}
+                <td class="product-category"><span class="categories">Payment Done</span></td>
+                {%endif%}
+                <td class="action" data-title="Action">
+                  <div class="">
+                    <ul class="list-inline justify-content-center">
+                      <li class="list-inline-item">
+                        <a  data-placement="top" title="view" class="view" data-toggle="modal" data-target="#pro{{cart_data.id}}" href="#">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </li>
+                      <!-- <li class="list-inline-item">
+                        <a class="edit" data-toggle="tooltip" data-placement="top" title="Edit" href="">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                      </li> -->
+                      <li class="list-inline-item">
+                        <a class="delete" data-toggle="tooltip" data-placement="top"  onclick="delete_product('{{cart_data.id}}')" title="Delete" href="#">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              {%endfor%}
+            </tbody>
+          </table>
+          {%endif%}
+
+        </div>
+      </div>
+
+    </div>
+    <!-- Row End -->
+  </div>
+  <!-- Container End -->
+</section>
+
+
+<script>
+$('.new_password').hide(1000)
+$('#check_password_btn').click(function(){
+    old_password = $('#old_password').val()
+    $.ajax({
+        url:'{%url "check_password" %}',
+        type:'get',
+        data:{old_password:old_password},
+        success:function(data)
+        {
+            if(data == 'same')
+            {
+                $('.old_password_check').slideUp(1000)
+                $('.new_password').show(1000)
+            }
+        }
+    })
+})
+
+    $('#conf_password').keyup(function(){
+        let new_pass = $('#new_password').val()
+        if($(this).val() == new_pass)
+        {
+         
+            $('#new_password_error').addClass('bg-success').removeClass('bg-danger')
+            $('#new_password_error').html('Password Same')
+            $('#new_password_btn').attr('disabled',false)
+            
+            
+        }
+        else
+        {
+            $('#new_password_error').removeClass('bg-success').addClass('bg-danger')
+            $('#new_password_error').html('Password Not Same')
+            $('#new_password_btn').attr('disabled',true)
+
+        }
+    })
+
+    $(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+function delete_product(pro_id)
+{
+  $('#delete_product_id').val(pro_id)
+  $('#delete_product').modal('show')
+  // alert(pro_id)
+}
+
+</script>
+
+
+<!-- JAVASCRIPTS -->
+<script src="{%static 'user_dashboard/plugins/jQuery/jquery.min.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/bootstrap/js/popper.min.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/bootstrap/js/bootstrap.min.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/bootstrap/js/bootstrap-slider.js'%}"></script>
+  <!-- tether js -->
+<script src="{%static 'user_dashboard/plugins/tether/js/tether.min.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/raty/jquery.raty-fa.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/slick-carousel/slick/slick.min.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/jquery-nice-select/js/jquery.nice-select.min.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/fancybox/jquery.fancybox.pack.js'%}"></script>
+<script src="{%static 'user_dashboard/plugins/smoothscroll/SmoothScroll.min.js'%}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU&libraries=places"></script>
+<script src="{%static 'user_dashboard/plugins/google-map/gmap.js'%}"></script>
+<script src="{%static 'user_dashboard/js/script.js'%}"></script>
+
+</body>
+
+</html>
+
+
+{%endblock%}

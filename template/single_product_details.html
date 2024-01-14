@@ -1,0 +1,70 @@
+{%extends 'navbar_footer.html'%}
+{%load static %}
+{% load mathfilters %}
+
+{%block 'main_content'%}
+    <!-- ##### Single Product Details Area Start ##### -->
+    {%for single_data in single_product_data%}
+    <section class="single_product_details_area d-flex align-items-center">
+        <!-- Single Product Thumb -->
+        <div class="single_product_thumb clearfix">
+            <div class="product_thumbnail_slides owl-carousel">
+                <img src="media/{{single_data.product_img}}" alt="">
+                <img src="media/{{single_data.product_img}}" alt="">
+                <img src="media/{{single_data.product_img}}" alt="">
+            </div>
+        </div>
+
+        <!-- Single Product Description -->
+        <div class="single_product_desc clearfix">
+            <span>{{single_data.brand_name}}</span>
+            <a href="cart.html">
+                <h2>{{single_data.product_name}}</h2>
+            </a>
+            {%if single_data.discount == 0 %}
+            <p class="product-price"></span><i class="fa fa-rupee"></i> {{single_data.price|sub:single_data.discount}}</p>
+            {%else%}
+            <p class="product-price"><span class="old-price"><i class="fa fa-rupee"></i> {{single_data.price}}</span><i class="fa fa-rupee"></i> {{single_data.price|sub:single_data.discount}}</p>
+            {%endif%}
+            <p class="product-desc">{{single_data.description}}</p>
+
+            <!-- Form -->
+            <form class="cart-form clearfix" method="post">
+                <!-- Select Box -->
+                <!-- <div class="select-box d-flex mt-50 mb-30">
+                    <select name="select" id="productSize" class="mr-5">
+                        <option value="value">Size: XL</option>
+                        <option value="value">Size: X</option>
+                        <option value="value">Size: M</option>
+                        <option value="value">Size: S</option>
+                    </select>
+                    <select name="select" id="productColor">
+                        <option value="value">Color: Black</option>
+                        <option value="value">Color: White</option>
+                        <option value="value">Color: Red</option>
+                        <option value="value">Color: Purple</option>
+                    </select>
+                </div> -->
+                <!-- Cart & Favourite Box -->
+                <div class="cart-fav-box d-flex align-items-center">
+                    <!-- Cart -->
+                    {%if user.is_authenticated %}
+                    <a   href='#' id='pro_id{{single_data.id}}' class="btn emarket-btn" onclick="add_to_cart_btn('{{single_data.id}}','{{single_data.product_name}}','{{single_data.product_type}}','{{single_data.product_category}}','{{single_data.price}}','{{single_data.brand_name}}','{{single_data.product_img}}','{{single_data.discount}}',this.id)">Add to cart</a>
+                    {%else%}
+                    <a href="{%url 'login_page' %}" class="btn emarket-btn">Please login</a>
+                    {%endif%}
+                    <!-- Favourite -->
+                    <div class="product-favourite ml-4">
+                        {%if user.is_authenticated%}
+                        <a href="#" class="favme fa fa-heart"></a>
+                        {%else%}
+                        <a href="{%url 'login_page'%}" class="favme fa fa-sign-in"></a>
+                        {%endif%}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    {%endfor%}
+    <!-- ##### Single Product Details Area End ##### -->
+    {%endblock%}

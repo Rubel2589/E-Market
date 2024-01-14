@@ -1,0 +1,162 @@
+
+{%extends 'navbar_footer.html'%}
+{%load static %}
+{% load mathfilters %}
+
+{%block 'main_content'%}
+<!-- ##### Welcome Area Start ##### -->
+    <section class="welcome_area bg-img background-overlay" style="background-image: url({%static 'img/bg-img/bg-1.jpg'%});">
+        <div class="container h-100">
+            {% if contact_status %}
+            <div class="alert alert-success">{{ contact_status }}</div>
+            {%endif%}
+            {% if register_success %}
+            <div class="alert alert-success">{{ register_success }}</div>
+            {%endif%}
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="hero-content">
+                        <!-- <h6>asoss</h6> -->
+                        <h2>New Collection</h2>
+                        <a href="{%url 'shop' %}" class="btn emarket-btn">view collection</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Welcome Area End ##### -->
+
+    <!-- ##### Top Catagory Area Start ##### -->
+    <div class="top_catagory_area section-padding-80 clearfix">
+        <div class="container">
+            <div class="row justify-content-center">
+                {%for i in product_type%}
+                <!-- Single Catagory -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="single_catagory_area d-flex align-items-center justify-content-center bg-img" style="background-image: url('/media/{{i.product_image}}');">
+                        <div class="catagory-content">
+                            <a href="{%url 'pro_type' %}?type={{i.id}}">{{i.name}}</a>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+    <!-- ##### Top Catagory Area End ##### -->
+
+    <!-- ##### CTA Area Start ##### -->
+    {%for dd in latest_product %}
+    <div class="cta-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="cta-content bg-img background-overlay" style="background-image: url('/media/{{dd.product_img}}');">
+                        <div class="h-100 d-flex align-items-center justify-content-end">
+                            <div class="cta--text">
+                                {%if dd.discount == 0%}
+                                <h6>No Discount</h6>
+                                {%else%}
+                                <h6>{{dd.discount|div:dd.price|mul:100}}</h6>
+                                {%endif%}
+                                <h2>Global Sale</h2>
+                                <a href="{%url 'single_product_detail' %}?pro_id={{dd.id}}&pro_type={{dd.product_type_id}}&pro_cat={{dd.product_category_id}}" class="btn emarket-btn">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+    <!-- ##### CTA Area End ##### -->
+
+    <!-- ##### New Arrivals Area Start ##### -->
+
+    <section class="new_arrivals_area section-padding-80 clearfix">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading text-center">
+                        <h2>Popular Products</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="popular-products-slides owl-carousel">
+                        {%for all_data in all_product_details%}
+                        <!-- Single Product -->
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="media/{{all_data.product_img}}" style="height: 350px;" alt="">
+                                <!-- Hover Thumb -->
+                                <img class="hover-img" src="media/{{all_data.product_img}}"  style="height: 350px;"alt="">
+                                <!-- Product Badge -->
+                                {%if all_data.discount == 0%}
+                                <span></span>
+                                {%else%}
+                                            <div class="product-badge offer-badge">
+                                    <span>-{{all_data.discount}} <i class="fa fa-rupee"></i> </span>
+                                </div>
+                                    {%endif%}
+                                <!-- Favourite -->
+                                <div class="product-favourite">
+                                    <a href="#" class="favme fa fa-heart"></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <span>{{all_data.brand_name}}</span>
+                                <a href="{%url 'single_product_detail' %}?pro_id={{all_data.id}}&pro_type={{all_data.product_type_id}}&pro_cat={{all_data.product_category_id}}">
+                                    <h6>{{all_data.product_name}}</h6>
+                                </a>
+
+                                {%if all_data.discount == 0%}
+                                <p class="product-price"></span><i class="fa fa-rupee"></i> {{all_data.price|sub:all_data.discount}}</p>
+                                {%else%}
+                                <p class="product-price"><span class="old-price"><i class="fa fa-rupee"></i> {{all_data.price}}</span><i class="fa fa-rupee"></i> {{all_data.price|sub:all_data.discount}}</p>
+                                {%endif%}
+
+                                <!-- Hover Content -->
+                                <div class="hover-content">
+                                    <!-- Add to Cart -->
+                                    <div class="add-to-cart-btn">
+                                        {%if user.is_authenticated%}
+                                        <a href="#" id='pro_id{{all_data.id}}' class="btn emarket-btn" onclick="add_to_cart_btn('{{all_data.id}}','{{all_data.product_name}}','{{all_data.product_type}}','{{all_data.product_category}}','{{all_data.price}}','{{all_data.brand_name}}','{{all_data.product_img}}','{{all_data.discount}}',this.id)" >Add to Cart</a>
+                                        {%else%}
+                                        <a href="{%url 'login_page' %}" class="btn emarket-btn">Please Login</a>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {%endfor%}
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### New Arrivals Area End ##### -->
+
+    <!-- ##### Brands Area Start ##### -->
+    <div class="brands-area d-flex align-items-center justify-content-between">
+        <!-- Brand Logo -->
+        {%for i in brand_type_data%}
+        <!-- {{i.name}} -->
+        <div class="single-brands-logo">
+            <img src="/media/{{i.brand_image}}" alt="">
+        </div>
+        {%endfor%}
+    </div>
+    <!-- ##### Brands Area End ##### -->
+
+   
+
+{%endblock%}
